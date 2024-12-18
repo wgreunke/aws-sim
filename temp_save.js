@@ -1,6 +1,6 @@
 import { Image, StyleSheet, Platform, View, Text, Button, TextInput, ScrollView } from 'react-native';
 import { useState } from 'react';
-import { Picker } from '@react-native-picker/picker';
+import { Dropdown } from 'react-native-element-dropdown';
 
 
 import { HelloWave } from '@/components/HelloWave';
@@ -39,6 +39,13 @@ const EC2Component = ({ Availability_Zone_Options }) => {
     "t3.nano",
     ];
     
+    const Instance_Status_Options = [
+    "Running",
+    "Stopped",
+    "Terminated",
+    ];
+
+
     const VPC_Options = [
     "VPC",
     "Subnet",
@@ -66,6 +73,7 @@ const [ec2_instances, setEc2_instances] = useState([
     ami: 'Linux 2023',
     instanceType: 't2.nano',
     availabilityZone: 'us-east-1a',
+    instanceStatus: 'Running',
   },
 ]);
 
@@ -78,7 +86,39 @@ const [ec2_instances, setEc2_instances] = useState([
   const [selectedInstanceType, setSelectedInstanceType] = useState('');
   const [selectedAvailabilityZone, setSelectedAvailabilityZone] = useState('');
   const [selectedName, setSelectedName] = useState('');  
+  const [selectedInstanceStatus, setSelectedInstanceStatus] = useState('');
 
+  // Add new state for editing
+  const [editingInstance, setEditingInstance] = useState(null);
+
+  // Add function to handle edit save
+  const updateEC2Instance = () => {
+    const updatedInstances = ec2_instances.map(instance => 
+      instance.id === editingInstance.id ? {
+        ...instance,
+        name: selectedName,
+        ami: selectedAMI,
+        instanceType: selectedInstanceType,
+        availabilityZone: selectedAvailabilityZone,
+        instanceStatus: selectedInstanceStatus,
+      } : instance
+    );
+    setEc2_instances(updatedInstances);
+    setCrudMode('ShowList');
+    setEditingInstance(null);
+    setSelectedName('');
+  };
+
+  // Add function to start editing
+  const startEditing = (instance) => {
+    setEditingInstance(instance);
+    setSelectedName(instance.name);
+    setSelectedAMI(instance.ami);
+    setSelectedInstanceType(instance.instanceType);
+    setSelectedAvailabilityZone(instance.availabilityZone);
+    setSelectedInstanceStatus(instance.instanceStatus);
+    setCrudMode('edit');
+  };
 
   //When the button is pressed, create a new EC2 instance
   const createEC2Instance = () => {
@@ -88,6 +128,7 @@ const [ec2_instances, setEc2_instances] = useState([
       ami: selectedAMI,
       instanceType: selectedInstanceType,
       availabilityZone: selectedAvailabilityZone,
+      instanceStatus: selectedInstanceStatus,
     };
     setEc2_instances([...ec2_instances, newInstance]);
     setCrudMode('ShowList');
@@ -102,18 +143,23 @@ const [ec2_instances, setEc2_instances] = useState([
       {/* Display the list of EC2 instances */}
       {ec2_instances.map((instance) => (
         <View key={instance.id}>
-        <Text>{instance.name}</Text>
+        <Text style={{fontWeight: 'bold'}}>{instance.name}</Text><Button 
+          title="Edit" 
+          onPress={() => startEditing(instance)}
+        />
         <Text>{instance.ami}</Text>
         <Text>{instance.instanceType}</Text>
         <Text>{instance.availabilityZone}</Text>
+        
         <Text>------</Text>
         </View>
       ))}
       {/* Only show the button if the edit mode is showlist */}
        {crudMode === 'ShowList' && <Button title="New EC2 Instance" onPress={() => setCrudMode('create')} />}
       
-       {/* If edit mode is true, show the edit mode */}
-       {crudMode === 'create' && (
+       {/* If edit mode is true, show the edit mode */
+       /* ***************** Create Mode ****************** */}
+       {(crudMode === 'create' || crudMode === 'edit') && (
        <>
        <Text style={styles.heading}>Crud Mode {crudMode}</Text>
        <Text>Name your EC2 instance</Text>
@@ -124,36 +170,73 @@ const [ec2_instances, setEc2_instances] = useState([
           placeholder="Enter EC2 instance name"
         />
         <Text>Choose an AMI</Text>
-        <Picker
-          selectedValue={selectedAMI}
-          onValueChange={(value) => setSelectedAMI(value)}
-          style={styles.picker}>
-          <Picker.Item label="Select an AMI" value="" />
-          {AMI_Options.map((option, index) => (
-            <Picker.Item key={index} label={option} value={option} />
-          ))}
-        </Picker>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={AMI_Options.map(option => ({
+            label: option,
+            value: option,
+          }))}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select an AMI"
+          value={selectedAMI}
+          onChange={item => setSelectedAMI(item.value)}
+        />
         <Text>Choose an Instance Type</Text>
-        <Picker
-          selectedValue={selectedInstanceType}
-          onValueChange={(value) => setSelectedInstanceType(value)}
-          style={styles.picker}>
-          <Picker.Item label="Select an Instance Type" value="" />
-          {Instance_Type_Options.map((option, index) => (
-            <Picker.Item key={index} label={option} value={option} />
-          ))}
-        </Picker>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={Instance_Type_Options.map(option => ({
+            label: option,
+            value: option,
+          }))}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select an Instance Type"
+          value={selectedInstanceType}
+          onChange={item => setSelectedInstanceType(item.value)}
+        />
         <Text>Choose an Availability Zone</Text>
-        <Picker
-          selectedValue={selectedAvailabilityZone}
-          onValueChange={(value) => setSelectedAvailabilityZone(value)}
-          style={styles.picker}>
-          <Picker.Item label="Select an Availability Zone" value="" />
-          {Availability_Zone_Options.map((option, index) => (
-            <Picker.Item key={index} label={option} value={option} />
-          ))}
-        </Picker>
-        <Button title="Create EC2 Instance" onPress={createEC2Instance} />
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={Availability_Zone_Options.map(option => ({
+            label: option,
+            value: option,
+          }))}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select an Availability Zone"
+          value={selectedAvailabilityZone}
+          onChange={item => setSelectedAvailabilityZone(item.value)}
+        />
+        <Text>Choose an Instance Status</Text>
+        <Dropdown
+          style={styles.dropdown}
+          placeholderStyle={styles.placeholderStyle}
+          selectedTextStyle={styles.selectedTextStyle}
+          data={Instance_Status_Options.map(option=>({
+              label: option,
+              value: option,
+            }))}
+          maxHeight={300}
+          labelField="label"
+          valueField="value"
+          placeholder="Select an Instance Status"
+          value={selectedInstanceStatus}
+          onChange={item => setSelectedInstanceStatus(item.value)}
+        />
+        <Button 
+          title={crudMode === 'create' ? "Save EC2 Instance" : "Update EC2 Instance"} 
+          onPress={crudMode === 'create' ? createEC2Instance : updateEC2Instance} 
+        />
         </>
        )}
     </View>
@@ -164,7 +247,7 @@ const [ec2_instances, setEc2_instances] = useState([
 
 export default function HomeScreen() {
   return (
-    <ScrollView style={{ margin: 10 }}>
+    <ScrollView style={{ margin: 10, marginTop: 50 }}>
       <Text>This is the parent container for the AWS Simulator</Text>
       {/* Button that creates a new EC2 instance */}
       <EC2Component Availability_Zone_Options={Availability_Zone_Options} />
@@ -193,13 +276,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   heading: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 8,
   },
-  picker: {
-    width: '100%',
-    marginVertical: 10,
+  dropdown: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    borderRadius: 6,
+    paddingHorizontal: 6,
+    marginVertical: 6,
+  },
+  placeholderStyle: {
+    fontSize: 14,
+    color: '#666',
+  },
+  selectedTextStyle: {
+    fontSize: 14,
   },
   componentBox: {
     borderWidth: 1,
@@ -207,6 +301,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     margin: 10,
+    marginBottom: 50,
     backgroundColor: '#fff',
     shadowColor: '#000',
     shadowOffset: {
