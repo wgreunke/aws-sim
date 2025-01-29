@@ -2,7 +2,7 @@
 //The user can create a lamda function and see the list of lamda functions
 
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -94,6 +94,8 @@ const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
             
             <Button title="Test" onPress={() => testLamdaFunction(lamdaFunction.code, lamdaFunction.testJson)} />
             <Button title="Delete" onPress={() => deleteLamdaFunction(lamdaFunction.name)} />
+            <TextInput value={lamdaFunction.testJson} onChangeText={(text) => setTestJson(text)} />
+            <Button title="Update Test Script" onPress={() => editTestScript(lamdaFunction.name)} />
         </View>
     )
 }
@@ -103,15 +105,14 @@ const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
 //This shows the list of lamda functions the user has created
 export default function LamdaViewer() {
 return (
-    <View style={{ margin: 10 }}>
+    <ScrollView style={{ margin: 10 }}>
         <Text>Lamda Viewer</Text>
         {Object.keys(lamdaFunctionList).map((key) => (
-            <View>
+            <View style={{ width: 300 }}>
                 <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[key]} />
-                 
             </View>
         ))}
-    </View>
+    </ScrollView>
 )
 }
 
