@@ -149,7 +149,7 @@ const reducer = (state: State, action: ActionType): State => {
   }
 };
 
-const EC2Component = ({ Availability_Zone_Options }) => {
+const EC2Component = ({ Availability_Zone_Options }: { Availability_Zone_Options: string[] }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleFormChange = (field: string, value: string) => {
@@ -173,7 +173,8 @@ const EC2Component = ({ Availability_Zone_Options }) => {
         <>
           {state.instances.map((instance) => (
             <View key={instance.id}>
-              <Text style={{fontWeight: 'bold'}}>{instance.name}</Text><TouchableOpacity 
+              <Text style={{fontWeight: 'bold'}}>{instance.name}</Text>
+              <TouchableOpacity 
                 onPress={() => dispatch({ type: 'START_EDIT', payload: instance })}
               >
                 <Text style={styles.linkText}>Edit</Text>
@@ -315,7 +316,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,g
+    height: 178,
     width: 290,
     bottom: 0,
     left: 0,

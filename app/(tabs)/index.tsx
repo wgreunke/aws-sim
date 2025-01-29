@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, View } from 'react-native';
+import { Image, StyleSheet, Platform, View, Text } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -20,7 +20,7 @@ A user can click a button to start a resource.
 const EC2_options = [
   {
     images: ['Amazon Linux 2', 'Windows'],
-    regions: ['US East (N. Virginia', 'US East (Ohio)'],
+    regions: ['US East (N. Virginia)', 'US East (Ohio)'],
     instance_types: ['t2.micro', 't3.micro']
   }
 ]
@@ -58,29 +58,28 @@ const EC2_List = [
 function EC2({ ec2_instance }) {
   return (
     <View style={styles.ec2Box}>
-      <text>Id={ec2_instance.id}</text>
-      <text>
+      <Text>Id={ec2_instance.id}</Text>
+      <Text>
         {ec2_instance.type}: {ec2_instance.description} - {ec2_instance.price}
-        
-      </text>
+      </Text>
     </View>
   );
 }
 
 function S3() {
-  return <text>S3 bucket</text>;
+  return <Text>S3 bucket</Text>;
 }
 
 function Lambda() {
-  return <text>Lambda function</text>;
+  return <Text>Lambda function</Text>;
 }
 
 function RDS() {
-  return <text>RDS database</text>;
+  return <Text>RDS database</Text>;
 }
 
 function CloudFront() {
-  return <text>CloudFront distribution</text>;
+  return <Text>CloudFront distribution</Text>;
 }
 
 export default function HomeScreen() {
@@ -96,17 +95,17 @@ export default function HomeScreen() {
 
      
         <ThemedText type="title">This is an AWS Simulator</ThemedText>
-        <text>Go ahead a practice creating different AWS resources</text>
-        <text>You have the following resources to choose from:</text>
-        <text>You have the following resources running</text>
+        <Text>Go ahead a practice creating different AWS resources</Text>
+        <Text>You have the following resources to choose from:</Text>
+        <Text>You have the following resources running</Text>
      
 
-      <text>EC2 instances</text>
+      <Text>EC2 instances</Text>
       {EC2_List.map(ec2_instance => (
         <EC2 key={ec2_instance.id} ec2_instance={ec2_instance} />
       ))}
       
-      <text>S3 buckets</text>
+      <Text>S3 buckets</Text>
       <S3 />
       <Lambda />
       <RDS />
@@ -130,7 +129,7 @@ export default function HomeScreen() {
 
 
 
-      <text>This is some text</text>
+      <Text>This is some text</Text>
       
       </ThemedView>
       
