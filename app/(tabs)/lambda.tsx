@@ -94,30 +94,45 @@ const testLamdaFunction = (lamdaFunction: string, testJson: any) => {
 //It shows the name, description, code, and testJson
 //It also has a button to run the lamda function
 //It also has a button to delete the lamda function 
-const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
+const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunction: any, editTestScript: (name: string) => void }) => {
     const [testOutput, setTestOutput] = useState<JSX.Element | null>(null); // State to hold the output
+    const [testJson, setTestJson] = useState(lamdaFunction.testJson); // Added state for testJson
 
     const handleTest = () => {
-        const result = testLamdaFunction(lamdaFunction.code, lamdaFunction.testJson);
+        const result = testLamdaFunction(lamdaFunction.code, testJson); // Use testJson here
         setTestOutput(result); // Update the output state with the result
+    };
+
+    // Define the editTestScript function
+    const handleEditTestScript = () => {
+        // Logic for editing the test script can be added here
+        console.log(`Editing test script for: ${lamdaFunction.name}`);
     };
 
     return (
         <View>
             <Text>{lamdaFunction.name}</Text>
             <Text>{lamdaFunction.description}</Text>
+            <Text>{lamdaFunction.runtime}</Text>
+            <Text style={{ fontWeight: 'bold' }}>Code</Text>
             <View style={styles.codeBlock}>
                 <Text style={{ fontFamily: 'monospace' }}>{lamdaFunction.code}</Text>
             </View>
-            <Text>{JSON.stringify(lamdaFunction.testJson)}</Text>
-            
+            <Text style={{ fontWeight: 'bold' }}>Test</Text>
             <Button title="Test" onPress={handleTest} /> {/* Call handleTest on button press */}
             {testOutput} {/* Display the testoutput here */}
             <Text>.</Text>
             <TextInput 
                 value={JSON.stringify(lamdaFunction.testJson, null, 2)}
-                onChangeText={(text) => setTestJson(JSON.parse(text))} 
+                onChangeText={(text) => {
+                    try {
+                        setTestJson(JSON.parse(text)); // Attempt to parse the input text
+                    } catch (error) {
+                        console.error("Invalid JSON input:", error); // Log the error for debugging
+                    }
+                }} 
                 multiline={true}
+                editable={true}
                 style={{ 
                     marginVertical: 10, // Existing margin
                     borderWidth: 1, // Added border width
@@ -129,7 +144,7 @@ const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
             />
             <Button 
                 title="Update Test Script" 
-                onPress={() => editTestScript(lamdaFunction.name)} 
+                onPress={handleEditTestScript} // Use the defined function here
                 style={{ 
                     marginVertical: 10, // Existing margin
                     borderWidth: 1, // Added border width
@@ -140,7 +155,6 @@ const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
             />
             <Text>.</Text>
             <Button title="Delete" onPress={() => deleteLamdaFunction(lamdaFunction.name)} />
-            
         </View>
     )
 }
@@ -149,29 +163,26 @@ const LamdaFunctionInstance = ({ lamdaFunction }: { lamdaFunction: any }) => {
 
 //This shows the list of lamda functions the user has created
 export default function LamdaViewer() {
-return (
-    <ScrollView style={{ margin: 10, marginTop: 60, marginBottom: 50 }}>
-        <Text style={{ fontWeight: 'bold' }}>Lamda Viewer</Text>
-        {/* Just show a list of lamda functions */}
-        {Object.keys(lamdaFunctionList).map((key) => (
-            <View style={{ width: 300 }}>
-                <Text>{lamdaFunctionList[key].name}</Text>
-                <Text>{lamdaFunctionList[key].runtime}</Text>
-            </View>
-        ))}
-        <Button title="Create New Lamda Function" onPress={() => createNewLamdaFunction()} />
+    const [selectedFunction, setSelectedFunction] = useState<string | null>(null); // State to hold the selected function
 
+    return (
+        <ScrollView style={{ margin: 10, marginTop: 60, marginBottom: 50 }}>
+            <Text style={{ fontWeight: 'bold' }}>Lamda Functions</Text>
+            {/* Just show a list of lamda functions */}
+            {Object.keys(lamdaFunctionList).map((key) => (
+                <View style={{ width: 300 }} key={key}>
+                    <Text onPress={() => setSelectedFunction(key)} style={{ color: 'blue', textDecorationLine: 'underline' }}>
+                        {lamdaFunctionList[key].name}
+                    </Text>
+                </View>
+            ))}
+            <Button title="Create New Lamda Function" onPress={() => createNewLamdaFunction()} />
 
-
-
-
-        {Object.keys(lamdaFunctionList).map((key) => (
-            <View style={{ width: 300 }}>
-                <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[key]} />
-            </View>
-        ))}
-    </ScrollView>
-)
+            {selectedFunction && ( // Conditionally render the selected LamdaFunctionInstance
+                <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[selectedFunction]} editTestScript={() => {}} />
+            )}
+        </ScrollView>
+    )
 }
 
 const styles = StyleSheet.create({
