@@ -303,7 +303,7 @@ export default function HomeScreen() {
 }
 
 // ************* Styles *************
-
+ 
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: 'row',
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   reactLogo: {
-    height: 178,
+    height: 178,g
     width: 290,
     bottom: 0,
     left: 0,
