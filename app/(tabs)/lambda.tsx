@@ -15,7 +15,7 @@ const sampleLamdaFunction = {
 
 
 //This shows the list of lamda functions the user has created
-const LamdaViewer = () => {
+export default function LamdaViewer() {
 return (
     <View>
         <Text>Lamda Viewer</Text>
@@ -23,22 +23,4 @@ return (
 )
 }
 
-const Tab = createBottomTabNavigator();
-
-const AppNavigator = () => {
-    return (
-        <Tab.Navigator>
-            <Tab.Screen name="LamdaViewer" component={LamdaViewer} />
-        </Tab.Navigator>
-    );
-}
-
-// Wrap the AppNavigator in NavigationContainer
-const App = () => {
-    return (
-        <NavigationContainer>
-            <AppNavigator />
-        </NavigationContainer>
-    );
-}
 
