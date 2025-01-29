@@ -34,6 +34,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
         }}
       />
+      {/* Lambda  For some reason the icon is not showing up */}
       <Tabs.Screen
         name="lambda"
         options={{
