@@ -1,4 +1,5 @@
 import { Image, StyleSheet, Platform, View, Text } from 'react-native';
+import { Link } from 'expo-router';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -98,7 +99,24 @@ export default function HomeScreen() {
         <Text>Go ahead a practice creating different AWS resources</Text>
         <Text>You have the following resources to choose from:</Text>
         <Text>You have the following resources running</Text>
-     
+
+        {"Add a link to the lamda tab"}
+    <Text style={{ color: 'blue', fontSize: 20 }}>
+      <Link href="/lambda">Lambda</Link>
+    </Text>
+    <Text style={{ color: 'blue', fontSize: 20 }}>
+      <Link href="/s3">S3 Buckets</Link>
+    </Text>
+    <Text style={{ color: 'blue', fontSize: 20 }}>
+      <Link href="/ec2">EC2</Link>
+      </Text>
+      <Text style={{ color: 'blue', fontSize: 20 }}>
+        <Link href="/explore">Explore</Link>
+      </Text>
+
+
+
+
 
       <Text>EC2 instances</Text>
       {EC2_List.map(ec2_instance => (
@@ -112,26 +130,8 @@ export default function HomeScreen() {
       <CloudFront />
          
       
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
+    
 
-
-
-      <Text>This is some text</Text>
-      
-      </ThemedView>
       
 
 

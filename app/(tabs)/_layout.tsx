@@ -42,6 +42,16 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
+      
+        <Tabs.Screen
+        name="s3buckets"
+        options={{
+          title: 'S3 Buckets',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+
+
       <Tabs.Screen
         name="explore"
         options={{
