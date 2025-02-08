@@ -54,3 +54,6 @@ const S3BucketInstances = () => {
     );
 };
 
+// Add export default
+export default S3BucketInstances;
+

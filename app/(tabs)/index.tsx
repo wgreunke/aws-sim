@@ -96,22 +96,24 @@ export default function HomeScreen() {
 
      
         <ThemedText type="title">This is an AWS Simulator</ThemedText>
-        <Text>Go ahead a practice creating different AWS resources</Text>
-        <Text>You have the following resources to choose from:</Text>
-        <Text>You have the following resources running</Text>
+        <Text>This app is not affiliated with or endorsed by AWS</Text>
+        <Text>Availible Services</Text>
+        
 
-        {"Add a link to the lamda tab"}
     <Text style={{ color: 'blue', fontSize: 20 }}>
       <Link href="/lambda">Lambda</Link>
     </Text>
     <Text style={{ color: 'blue', fontSize: 20 }}>
-      <Link href="/s3">S3 Buckets</Link>
+      <Link href="/s3buckets">S3 Buckets</Link>
     </Text>
     <Text style={{ color: 'blue', fontSize: 20 }}>
       <Link href="/ec2">EC2</Link>
       </Text>
       <Text style={{ color: 'blue', fontSize: 20 }}>
         <Link href="/explore">Explore</Link>
+      </Text>
+      <Text style={{ color: 'blue', fontSize: 20 }}>
+        <Link href="/explor_temp">Explore temp</Link>
       </Text>
 
 
