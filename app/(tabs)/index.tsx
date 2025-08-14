@@ -132,9 +132,6 @@ export default function HomeScreen() {
       <CloudFront />
          
       
-    
-
-      
 
 
     </ParallaxScrollView>

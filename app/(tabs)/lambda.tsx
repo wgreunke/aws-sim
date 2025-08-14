@@ -47,15 +47,15 @@ const testJson = {
 //For each function, store the name, description, and code, and testJson    
 const lamdaFunctionList = {
     lamdaFunction1: {
-        name: "Lamda Function 1",
-        description: "This is the first lamda function",
+        name: "Python Lambda Function",
+        description: "This python script multiplies two numbers.",
         code: sampleLamdaFunction.code,
         runtime: "python3.13",
         testJson: testJson
     },
     lamdaFunction2: {
-        name: "Lamda Function 2",
-        description: "This is the second lamda function",
+        name: "Javascript Lambda Function",
+        description: "This javascript script returns the length of a string.",
         code: sampleLamdaFunction.code,
         runtime: "python3.13",
         testJson: testJson
@@ -118,11 +118,12 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
             <View style={styles.codeBlock}>
                 <Text style={{ fontFamily: 'monospace' }}>{lamdaFunction.code}</Text>
             </View>
-            <Text style={{ fontWeight: 'bold' }}>Test</Text>
-            <Button title="Test" onPress={handleTest} /> {/* Call handleTest on button press */}
-            {testOutput} {/* Display the testoutput here */}
-            <Text>.</Text>
+   
+            <Text style={{ fontWeight: 'bold' }}>Input Json</Text>
+
+
             <TextInput 
+                
                 value={JSON.stringify(lamdaFunction.testJson, null, 2)}
                 onChangeText={(text) => {
                     try {
@@ -142,19 +143,16 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
                     height: 120, // Set height to make the box taller
                 }} 
             />
-            <Button 
-                title="Update Test Script" 
-                onPress={handleEditTestScript} // Use the defined function here
-                style={{ 
-                    marginVertical: 10, // Existing margin
-                    borderWidth: 1, // Added border width
-                    borderColor: '#000', // Added border color
-                    padding: 5, // Added padding for better text visibility
-                    borderRadius: 5, // Added rounded corners
-                }} 
-            />
+            
+            <Text>{'\n'}</Text>
+   
+   
+            <Text style={{ fontWeight: 'bold' }}>Test</Text>
+            <Text>{'\n'}</Text>
+            <Button title="Test" onPress={handleTest} /> {/* Call handleTest on button press */}
+            {testOutput} {/* Display the testoutput here */}
             <Text>.</Text>
-            <Button title="Delete" onPress={() => deleteLamdaFunction(lamdaFunction.name)} />
+   
         </View>
     )
 }
