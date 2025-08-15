@@ -6,11 +6,26 @@ import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-nat
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
-//Sample lamda function to show in the viewer
-const sampleLamdaFunction = {
-    name: 'Sample Lamda Function',
-    description: 'This is a sample lamda function',
-    code: `def lambda_handler(event, context):
+
+
+const testJson = {
+    num_a: 1,
+    num_b: 2,
+    string_s: "I Like Lambda Functions"
+}
+
+//This is the list of lamda functions the user has created
+//For each function, store the name, description, and code, and testJson    
+const lamdaFunctionList = {
+    lamdaFunction1: {
+        name: "Python Lambda Function",
+        description: "This python function multiplies two numbers.",
+        
+        runtime: "python3.13",
+        testJson: testJson,
+        code: `
+        #Python
+        def lambda_handler(event, context):
     
     #Throw error if json file is not in the correct format.
     try:
@@ -35,38 +50,32 @@ const sampleLamdaFunction = {
     # Additional processing or logic can be added here
     # For example, logging the input values
     print("Input values are: ", event['num_a'], event['num_b'])`
-}
 
-const testJson = {
-    num_a: 1,
-    num_b: 2,
-    string_s: "I Like Lambda Functions"
-}
 
-//This is the list of lamda functions the user has created
-//For each function, store the name, description, and code, and testJson    
-const lamdaFunctionList = {
-    lamdaFunction1: {
-        name: "Python Lambda Function",
-        description: "This python function multiplies two numbers.",
-        code: sampleLamdaFunction.code,
-        runtime: "python3.13",
-        testJson: testJson
+
     },
-    lamdaFunction2: {
-        name: "Javascript Lambda Function",
-        description: "This javascript function returns the length of a string.",
-        code: sampleLamdaFunction.code,
-        runtime: "javascript",
-        testJson: testJson
-    },
-    lamdaFunction3: {
-        name: "Lamda Function 3",
-        description: "This is the third lamda function",
-        code: sampleLamdaFunction.code,
-        runtime: "Node.js 22.x",
-        testJson: testJson
-    }
+         lamdaFunction2: {
+         name: "Javascript Lambda Function",
+         description: "This javascript function returns the length of a string.",
+         runtime: "javascript",
+         testJson: testJson,
+         code: `
+         //Javascript
+         exports.handler = async (event) => {
+             // Expecting event to have a field 'inputString'
+             const inputString = event.inputString || "";
+
+             const length = inputString.length;
+
+             return {
+                 statusCode: 200,
+                 body: JSON.stringify({
+                     length: length
+                 }),
+             };
+         };`
+     },
+     
 }
 
 //The lamda function is hardcoded and just shown the the user.  
@@ -97,6 +106,7 @@ const testLamdaFunction = (lamdaFunction: string, testJson: any) => {
 const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunction: any, editTestScript: (name: string) => void }) => {
     const [testOutput, setTestOutput] = useState<JSX.Element | null>(null); // State to hold the output
     const [testJson, setTestJson] = useState(lamdaFunction.testJson); // Added state for testJson
+    const [jsonText, setJsonText] = useState(JSON.stringify(lamdaFunction.testJson, null, 2)); // State for the text input
 
     const handleTest = () => {
         const result = testLamdaFunction(lamdaFunction.code, testJson); // Use testJson here
@@ -111,6 +121,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
     return (
         <View>
+            <Text>{'\n'}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Function Name: </Text>{lamdaFunction.name}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Description: </Text>{lamdaFunction.description}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Runtime: </Text>{lamdaFunction.runtime}</Text>
@@ -125,12 +136,14 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
             <TextInput 
                 
-                value={JSON.stringify(testJson, null, 2)}
+                value={jsonText}
                 onChangeText={(text) => {
+                    setJsonText(text); // Allow free typing
                     try {
-                        setTestJson(JSON.parse(text)); // Attempt to parse the input text
+                        const parsed = JSON.parse(text);
+                        setTestJson(parsed); // Only update testJson if valid JSON
                     } catch (error) {
-                        console.error("Invalid JSON input:", error); // Log the error for debugging
+                        // Don't update testJson if JSON is invalid, but allow typing to continue
                     }
                 }} 
                 multiline={true}
@@ -148,11 +161,10 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
             <Text>{'\n'}</Text>
    
    
-            <Text style={{ fontWeight: 'bold' }}>Test</Text>
             <Text>{'\n'}</Text>
-            <Button title="Test" onPress={handleTest} /> {/* Call handleTest on button press */}
+            <Button title="Test Json Input" onPress={handleTest} /> {/* Call handleTest on button press */}
             {testOutput} {/* Display the testoutput here */}
-            <Text>.</Text>
+            
    
         </View>
     )
