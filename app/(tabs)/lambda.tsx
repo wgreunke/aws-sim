@@ -48,16 +48,16 @@ const testJson = {
 const lamdaFunctionList = {
     lamdaFunction1: {
         name: "Python Lambda Function",
-        description: "This python script multiplies two numbers.",
+        description: "This python function multiplies two numbers.",
         code: sampleLamdaFunction.code,
         runtime: "python3.13",
         testJson: testJson
     },
     lamdaFunction2: {
         name: "Javascript Lambda Function",
-        description: "This javascript script returns the length of a string.",
+        description: "This javascript function returns the length of a string.",
         code: sampleLamdaFunction.code,
-        runtime: "python3.13",
+        runtime: "javascript",
         testJson: testJson
     },
     lamdaFunction3: {
@@ -111,9 +111,9 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
     return (
         <View>
-            <Text>{lamdaFunction.name}</Text>
-            <Text>{lamdaFunction.description}</Text>
-            <Text>{lamdaFunction.runtime}</Text>
+            <Text><Text style={{ fontWeight: 'bold' }}>Function Name:S</Text>{lamdaFunction.name}</Text>
+            <Text><Text style={{ fontWeight: 'bold' }}>Description:</Text>{lamdaFunction.description}</Text>
+            <Text><Text style={{ fontWeight: 'bold' }}>Runtime: </Text>{lamdaFunction.runtime}</Text>
             <Text style={{ fontWeight: 'bold' }}>Code</Text>
             <View style={styles.codeBlock}>
                 <Text style={{ fontFamily: 'monospace' }}>{lamdaFunction.code}</Text>
@@ -174,8 +174,7 @@ export default function LamdaViewer() {
                     </Text>
                 </View>
             ))}
-            <Button title="Create New Lamda Function" onPress={() => createNewLamdaFunction()} />
-
+        
             {selectedFunction && ( // Conditionally render the selected LamdaFunctionInstance
                 <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[selectedFunction]} editTestScript={() => {}} />
             )}
