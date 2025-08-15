@@ -111,10 +111,11 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
     return (
         <View>
-            <Text><Text style={{ fontWeight: 'bold' }}>Function Name:S</Text>{lamdaFunction.name}</Text>
-            <Text><Text style={{ fontWeight: 'bold' }}>Description:</Text>{lamdaFunction.description}</Text>
+            <Text><Text style={{ fontWeight: 'bold' }}>Function Name: </Text>{lamdaFunction.name}</Text>
+            <Text><Text style={{ fontWeight: 'bold' }}>Description: </Text>{lamdaFunction.description}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Runtime: </Text>{lamdaFunction.runtime}</Text>
-            <Text style={{ fontWeight: 'bold' }}>Code</Text>
+            <Text>{'\n'}</Text>
+            <Text style={{ fontWeight: 'bold' }}>Function Code</Text>
             <View style={styles.codeBlock}>
                 <Text style={{ fontFamily: 'monospace' }}>{lamdaFunction.code}</Text>
             </View>
@@ -124,7 +125,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
             <TextInput 
                 
-                value={JSON.stringify(lamdaFunction.testJson, null, 2)}
+                value={JSON.stringify(testJson, null, 2)}
                 onChangeText={(text) => {
                     try {
                         setTestJson(JSON.parse(text)); // Attempt to parse the input text
