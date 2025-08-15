@@ -38,7 +38,7 @@ const lamdaFunctionList = {
     #Convert the nums to float to allow math.
     num_a = float(event['num_a'])   
     num_b = float(event['num_b'])    
-    num_c=num_a+num_b
+    num_c=num_a*num_b
 
     print("Print statements are printed to the log. ")
     print("num_c is: ", num_c)
@@ -78,24 +78,42 @@ const lamdaFunctionList = {
      
 }
 
-//The lamda function is hardcoded and just shown the the user.  
+//The lamda function is hardcoded and just shown the the user. 
+//There is a function in python and a function in javascript.
 // It looks like pytyon but javascript is doing s
 //The user will not be able to edit the lamda function.
-//When you test the lamda function, take in the json and
-//The input to the lamda function is the testJson
-const testLamdaFunction = (lamdaFunction: string, testJson: any) => {
+//When you test the lamda function, take in the input json text and output the results.
+const testLamdaFunction = (lamdaLanguage: string, InputJson: any) => {
 
-    //This is the code that will be run
-    let num_c = testJson.num_a + testJson.num_b;
+if (lamdaLanguage == "python3.13") {
+
+    //Python code just adds two numbers.
+    let num_c = InputJson.num_a * InputJson.num_b;
     let console_output = "num_c is: " + num_c;
 
     return (
         <View>
             <Text style={{ fontWeight: 'bold' }}>Console Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
-            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>{testJson.string_s} , {num_c}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>{InputJson.string_s} , {num_c}</Text></Text>
         </View>
     );
 }
+else if (lamdaLanguage == "javascript") {
+ 
+    //Javascript code returns the length of the string.
+    let num_c = InputJson.string_s.length;
+    let console_output = "The length of num_c is: " + num_c;
+ 
+    return (
+        <View>
+            <Text style={{ fontWeight: 'bold' }}>Console Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>{InputJson.string_s} , {num_c}</Text></Text>
+        </View>
+    );
+}
+
+}; // Add missing closing brace for testLamdaFunction
+
 
 
 
@@ -109,7 +127,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
     const [jsonText, setJsonText] = useState(JSON.stringify(lamdaFunction.testJson, null, 2)); // State for the text input
 
     const handleTest = () => {
-        const result = testLamdaFunction(lamdaFunction.code, testJson); // Use testJson here
+        const result = testLamdaFunction(lamdaFunction.runtime, testJson); // Use testJson here
         setTestOutput(result); // Update the output state with the result
     };
 
@@ -120,7 +138,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
     };
 
     return (
-        <View>
+        <View style={styles.functionContainer}>
             <Text>{'\n'}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Function Name: </Text>{lamdaFunction.name}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Description: </Text>{lamdaFunction.description}</Text>
@@ -135,7 +153,6 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
 
             <TextInput 
-                
                 value={jsonText}
                 onChangeText={(text) => {
                     setJsonText(text); // Allow free typing
@@ -170,7 +187,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
     )
 }
 
-
+//****************************** Main Function ****************************** */
 
 //This shows the list of lamda functions the user has created
 export default function LamdaViewer() {
@@ -183,13 +200,13 @@ export default function LamdaViewer() {
             {Object.keys(lamdaFunctionList).map((key) => (
                 <View style={{ width: 300 }} key={key}>
                     <Text onPress={() => setSelectedFunction(key)} style={{ color: 'blue', textDecorationLine: 'underline' }}>
-                        {lamdaFunctionList[key].name}
+                        {lamdaFunctionList[key as keyof typeof lamdaFunctionList].name}
                     </Text>
                 </View>
             ))}
         
             {selectedFunction && ( // Conditionally render the selected LamdaFunctionInstance
-                <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[selectedFunction]} editTestScript={() => {}} />
+                <LamdaFunctionInstance lamdaFunction={lamdaFunctionList[selectedFunction as keyof typeof lamdaFunctionList]} editTestScript={() => {}} />
             )}
         </ScrollView>
     )
@@ -211,6 +228,14 @@ const styles = StyleSheet.create({
         padding: 10, // Padding inside the border
         borderRadius: 5, // Rounded corners
         marginVertical: 5, // Space above and below
+    },
+    functionContainer: {
+        borderWidth: 2, // Border width
+        borderColor: '#007BFF', // Blue border color
+        padding: 15, // Padding inside the border
+        borderRadius: 10, // Rounded corners
+        marginVertical: 10, // Space above and below
+        backgroundColor: '#f8f9fa', // Light background color
     },
 });
 
