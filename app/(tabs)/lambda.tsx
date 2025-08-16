@@ -59,22 +59,24 @@ const lamdaFunctionList = {
          description: "This javascript function returns the length of a string.",
          runtime: "javascript",
          testJson: testJson,
-         code: `
-         //Javascript
+                  code: `
          exports.handler = async (event) => {
-             // Expecting event to have a field 'inputString'
-             const inputString = event.inputString || "";
+             // Extract string_s from the incoming event
+             const str = event.string_s || "";
 
-             const length = inputString.length;
+             // Compute length
+             const length = str.length;
 
+             // Return result
              return {
                  statusCode: 200,
                  body: JSON.stringify({
-                     length: length
+                     stringLength: length
                  }),
              };
-         };`
-     },
+         };
+         `
+      },
      
 }
 
@@ -238,5 +240,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#f8f9fa', // Light background color
     },
 });
+
 
 
