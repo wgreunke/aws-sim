@@ -9,7 +9,7 @@ import { NavigationContainer } from '@react-navigation/native';
 
 
 const testJson = {
-    num_a: 5,
+    num_a: 3,
     num_b: 7,
     string_s: "Cloud"
 }
@@ -18,7 +18,7 @@ const testJson = {
 //For each function, store the name, description, and code, and testJson    
 const lamdaFunctionList = {
     lamdaFunction1: {
-        name: "Python Lambda Function",
+        name: "Find_Product_of_Two_Numbers",
         description: "This python function multiplies two numbers.",
         runtime: "python3.13",
         testJson: testJson,
@@ -54,7 +54,7 @@ const lamdaFunctionList = {
 
     },
          lamdaFunction2: {
-         name: "Javascript Lambda Function",
+         name: "Find_String_Length",
          description: "This javascript function returns the length of a string.",
          runtime: "javascript",
          testJson: testJson,
@@ -90,12 +90,12 @@ if (lamdaLanguage == "python3.13") {
 
     //Python code just adds two numbers.
     let num_c = InputJson.num_a * InputJson.num_b;
-    let console_output = "num_a * num_b is " + num_c;
+    let console_output = `{"num_a": ${InputJson.num_a}, "num_b": ${InputJson.num_b}, "product": ${num_c}}`;
 
     return (
         <View>
-            <Text style={{ fontWeight: 'bold' }}>Console Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
-            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>The product is {num_c}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>JSON Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>CloudWatch Log Output: <Text style={{ fontWeight: 'normal' }}>/aws/lamda/Find_Product_of_Two_Numbers/{num_c}:{InputJson.num_a}*{InputJson.num_b}</Text></Text>
         </View>
     );
 }
@@ -103,12 +103,12 @@ else if (lamdaLanguage == "javascript") {
  
     //Javascript code returns the length of the string.
     let num_c = InputJson.string_s.length;
-    let console_output = "The length of num_c is: " + num_c;
+    let console_output = `{"string_s": "${InputJson.string_s}", "string_length": ${num_c}}`;
  
     return (
         <View>
-            <Text style={{ fontWeight: 'bold' }}>Console Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
-            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>{InputJson.string_s} , {num_c}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>JSON Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>CloudWatch Log Output: <Text style={{ fontWeight: 'normal' }}>/aws/lamda/Find_String_Length/{num_c}:{InputJson.string_s} </Text></Text>
         </View>
     );
 }
