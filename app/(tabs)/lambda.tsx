@@ -2,16 +2,16 @@
 //The user can create a lamda function and see the list of lamda functions
 
 import { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, TouchableOpacity, Keyboard } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 
 
 
 const testJson = {
-    num_a: 1,
-    num_b: 2,
-    string_s: "I Like Lambda Functions"
+    num_a: 5,
+    num_b: 7,
+    string_s: "Cloud"
 }
 
 //This is the list of lamda functions the user has created
@@ -20,7 +20,6 @@ const lamdaFunctionList = {
     lamdaFunction1: {
         name: "Python Lambda Function",
         description: "This python function multiplies two numbers.",
-        
         runtime: "python3.13",
         testJson: testJson,
         code: `
@@ -91,12 +90,12 @@ if (lamdaLanguage == "python3.13") {
 
     //Python code just adds two numbers.
     let num_c = InputJson.num_a * InputJson.num_b;
-    let console_output = "num_c is: " + num_c;
+    let console_output = "num_a * num_b is " + num_c;
 
     return (
         <View>
             <Text style={{ fontWeight: 'bold' }}>Console Output:<Text style={{ fontWeight: 'normal' }}> {console_output}</Text></Text>
-            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>{InputJson.string_s} , {num_c}</Text></Text>
+            <Text style={{ fontWeight: 'bold' }}>Log Output: <Text style={{ fontWeight: 'normal' }}>The product is {num_c}</Text></Text>
         </View>
     );
 }
@@ -141,7 +140,7 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
 
     return (
         <View style={styles.functionContainer}>
-            <Text>{'\n'}</Text>
+            
             <Text><Text style={{ fontWeight: 'bold' }}>Function Name: </Text>{lamdaFunction.name}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Description: </Text>{lamdaFunction.description}</Text>
             <Text><Text style={{ fontWeight: 'bold' }}>Runtime: </Text>{lamdaFunction.runtime}</Text>
@@ -154,28 +153,52 @@ const LamdaFunctionInstance = ({ lamdaFunction, editTestScript }: { lamdaFunctio
             <Text style={{ fontWeight: 'bold' }}>Input Json</Text>
 
 
-            <TextInput 
-                value={jsonText}
-                onChangeText={(text) => {
-                    setJsonText(text); // Allow free typing
-                    try {
-                        const parsed = JSON.parse(text);
-                        setTestJson(parsed); // Only update testJson if valid JSON
-                    } catch (error) {
-                        // Don't update testJson if JSON is invalid, but allow typing to continue
-                    }
-                }} 
-                multiline={true}
-                editable={true}
-                style={{ 
-                    marginVertical: 10, // Existing margin
-                    borderWidth: 1, // Added border width
-                    borderColor: '#000', // Added border color
-                    padding: 5, // Added padding for better text visibility
-                    borderRadius: 5, // Added rounded corners
-                    height: 120, // Set height to make the box taller
-                }} 
-            />
+            <View style={{ position: 'relative' }}>
+                                 <TextInput 
+                     value={jsonText}
+                     onChangeText={(text) => {
+                        setJsonText(text); // Allow free typing
+                        try {
+                            const parsed = JSON.parse(text);
+                            setTestJson(parsed); // Only update testJson if valid JSON
+                        } catch (error) {
+                            // Don't update testJson if JSON is invalid, but allow typing to continue
+                        }
+                    }} 
+                    multiline={true}
+                    editable={true}
+                    returnKeyType="done"
+                    blurOnSubmit={true}
+                    style={{ 
+                        marginVertical: 10, // Existing margin
+                        borderWidth: 1, // Added border width
+                        borderColor: '#000', // Added border color
+                        padding: 5, // Added padding for better text visibility
+                        borderRadius: 5, // Added rounded corners
+                        height: 120, // Set height to make the box taller
+                        paddingRight: 40, // Add space for the icon
+                    }} 
+                />
+                <TouchableOpacity 
+                    style={{
+                        position: 'absolute',
+                        right: 10,
+                        top: 15,
+                        backgroundColor: '#f0f0f0',
+                        borderRadius: 15,
+                        width: 30,
+                        height: 30,
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                    }}
+                    onPress={() => {
+                        // Dismiss keyboard
+                        Keyboard.dismiss();
+                    }}
+                >
+                    <Text style={{ fontSize: 16, color: '#666' }}>X</Text>
+                </TouchableOpacity>
+            </View>
             
             <Text>{'\n'}</Text>
    
